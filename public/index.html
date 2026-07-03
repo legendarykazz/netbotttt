@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Social Post Generator</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel input-panel">
+        <div class="brand">
+          <div>
+            <p class="eyebrow">MCP + Web UI</p>
+            <h1>Daily Social Post Generator</h1>
+          </div>
+          <span class="status">Live</span>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Generator mode">
+          <button class="tab active" data-mode="daily" type="button">Daily Post</button>
+          <button class="tab" data-mode="calendar" type="button">30-Day Calendar</button>
+          <button class="tab" data-mode="image" type="button">Image</button>
+        </div>
+
+        <form id="dailyForm" class="tool-form">
+          <label>Business name<input name="business_name" value="Glow Studio" required /></label>
+          <label>Niche<input name="niche" value="skincare and beauty" required /></label>
+          <label>Target audience<input name="target_audience" value="busy women who want simple skincare routines" required /></label>
+          <label>Tone<input name="tone" value="warm, confident, helpful" required /></label>
+          <label>Platform<input name="platform" value="Instagram" required /></label>
+          <label>Offer or topic<textarea name="offer_or_topic" required>Promote a new hydrating facial package</textarea></label>
+          <button type="submit">Generate Post</button>
+        </form>
+
+        <form id="calendarForm" class="tool-form hidden">
+          <label>Business name<input name="business_name" value="Glow Studio" required /></label>
+          <label>Niche<input name="niche" value="skincare and beauty" required /></label>
+          <label>Target audience<input name="target_audience" value="busy women who want simple skincare routines" required /></label>
+          <label>Platform<input name="platform" value="Instagram" required /></label>
+          <label>Goal<textarea name="goal" required>Increase bookings for facials this month</textarea></label>
+          <button type="submit">Generate Calendar</button>
+        </form>
+
+        <form id="imageForm" class="tool-form hidden">
+          <label>Image prompt<textarea name="image_prompt" required>A bright spa treatment room with dewy skincare products on a clean counter, soft natural light, premium wellness mood</textarea></label>
+          <label>Brand colors<input name="brand_colors" value="#f7c8d0, #ffffff, #2f3a34" required /></label>
+          <label>Style<input name="style" value="clean editorial social media image" required /></label>
+          <button type="submit">Generate Image</button>
+        </form>
+      </section>
+
+      <section class="panel output-panel">
+        <div class="output-head">
+          <div>
+            <p class="eyebrow">Output</p>
+            <h2 id="outputTitle">Ready</h2>
+          </div>
+          <button id="copyButton" class="ghost" type="button">Copy</button>
+        </div>
+        <div id="loading" class="loading hidden">Generating...</div>
+        <div id="result" class="result empty">Fill the form and run a generator.</div>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
