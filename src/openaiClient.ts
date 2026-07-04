@@ -1,5 +1,7 @@
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
+import { mkdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import { config } from "./config.js";
 import {
   calendarOutputSchema,
@@ -48,6 +50,7 @@ function createOpenAiImageClient() {
 }
 
 const textClient = createTextClient();
+const generatedImageDir = join(process.cwd(), "public", "generated");
 
 function extractText(response: OpenAI.Chat.Completions.ChatCompletion): string {
   const text = response.choices[0]?.message?.content;
@@ -63,6 +66,20 @@ function parseJson<T>(text: string, schema: { parse: (value: unknown) => T }): T
   } catch (error) {
     throw new Error(`Failed to parse OpenAI JSON response: ${(error as Error).message}`);
   }
+}
+
+async function imageUrlFromBase64(base64: string, mimeType = "image/jpeg"): Promise<string> {
+  const extension = mimeType.includes("png") ? "png" : "jpg";
+
+  if (!config.PUBLIC_BASE_URL) {
+    return `data:${mimeType};base64,${base64}`;
+  }
+
+  await mkdir(generatedImageDir, { recursive: true });
+  const filename = `post-image-${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+  await writeFile(join(generatedImageDir, filename), Buffer.from(base64, "base64"));
+
+  return `${config.PUBLIC_BASE_URL.replace(/\/$/, "")}/generated/${filename}`;
 }
 
 export async function generateDailyPostText(input: {
@@ -172,7 +189,8 @@ Use a polished social media composition. Avoid unreadable text, distorted logos,
       throw new Error("Gemini image generation returned no image data.");
     }
 
-    return `data:image/png;base64,${base64}`;
+    const mimeType = interaction.output_image?.mime_type ?? "image/jpeg";
+    return imageUrlFromBase64(base64, mimeType);
   }
 
   if (!config.OPENAI_API_KEY) {
@@ -192,5 +210,5 @@ Use a polished social media composition. Avoid unreadable text, distorted logos,
     throw new Error("OpenAI image generation returned no image data.");
   }
 
-  return `data:image/png;base64,${base64}`;
+  return imageUrlFromBase64(base64, "image/png");
 }

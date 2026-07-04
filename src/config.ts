@@ -12,6 +12,7 @@ const configSchema = z.object({
   OPENROUTER_TEXT_MODEL: z.string().default("openai/gpt-4.1-mini"),
   GEMINI_TEXT_MODEL: z.string().default("gemini-3.5-flash"),
   GEMINI_IMAGE_MODEL: z.string().default("gemini-3.1-flash-image"),
+  PUBLIC_BASE_URL: z.string().url().optional(),
   OPENROUTER_SITE_URL: z.string().optional(),
   OPENROUTER_SITE_NAME: z.string().default("Daily Social Post MCP Server"),
   MCP_TRANSPORT: z.enum(["stdio", "http"]).default("stdio"),

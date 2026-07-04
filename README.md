@@ -85,6 +85,7 @@ OPENROUTER_API_KEY=sk-or-your-openrouter-api-key
 OPENROUTER_TEXT_MODEL=openai/gpt-4.1-mini
 GEMINI_API_KEY=your-gemini-api-key
 GEMINI_IMAGE_MODEL=gemini-3.1-flash-image
+PUBLIC_BASE_URL=https://your-render-app.onrender.com
 ```
 
 ### Gemini for text and images
@@ -95,6 +96,7 @@ AI_IMAGE_PROVIDER=gemini
 GEMINI_API_KEY=your-gemini-api-key
 GEMINI_TEXT_MODEL=gemini-3.5-flash
 GEMINI_IMAGE_MODEL=gemini-3.1-flash-image
+PUBLIC_BASE_URL=https://your-render-app.onrender.com
 ```
 
 ## Local MCP usage over stdio
@@ -196,4 +198,6 @@ npm start
 
 - Text generation uses `AI_TEXT_PROVIDER` and the matching model variable.
 - Image generation uses `AI_IMAGE_PROVIDER` and the matching image model variable.
-- `generate_post_image` currently returns a base64 data URL. For production apps that need permanent public image URLs, add S3, Cloudflare R2, or another object store and return that uploaded URL instead.
+- When `PUBLIC_BASE_URL` is set, `generate_post_image` saves generated images under `/generated` and returns a normal public image URL.
+- Without `PUBLIC_BASE_URL`, `generate_post_image` returns a base64 data URL.
+- Render's filesystem is ephemeral, so generated image URLs may disappear after restarts or redeploys. For permanent image hosting, add S3, Cloudflare R2, or another object store.
